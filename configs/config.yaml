@@ -1,0 +1,26 @@
+project:
+  name: BrushPose AI
+  output_dir: outputs
+data:
+  image_dir: data/images
+  annotation_dir: data/annotations
+  train_dir: data/train
+  val_dir: data/val
+  test_dir: data/test
+inference:
+  conf_threshold: 0.25
+  iou_threshold: 0.5
+classical_cv:
+  hsv_lower: [0, 0, 30]
+  hsv_upper: [180, 80, 255]
+  morph_kernel: 5
+  min_area: 500
+  debug: false
+yolo:
+  model_name: yolov8n.pt
+  imgsz: 640
+  conf: 0.25
+  device: cpu
+benchmark:
+  methods: ["classical", "pca", "yolo"]
+

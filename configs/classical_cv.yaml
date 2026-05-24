@@ -1,0 +1,7 @@
+classical_cv:
+  hsv_lower: [0, 0, 30]
+  hsv_upper: [180, 80, 255]
+  morph_kernel: 5
+  min_area: 500
+  debug: true
+

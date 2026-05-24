@@ -1,0 +1,9 @@
+yolo:
+  model_name: yolov8n.pt
+  data_yaml: data/dataset.yaml
+  epochs: 50
+  imgsz: 640
+  batch: 16
+  conf: 0.25
+  device: cpu
+
