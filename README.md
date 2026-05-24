@@ -367,23 +367,64 @@ Attribution:
 
 ## Command Examples
 ```bash
-# Data
-python src/cli.py prepare-data --config configs/config.yaml
-python src/cli.py validate-data --config configs/config.yaml
+# Dataset: collect template
+python src/cli.py prepare-data --mode collect \
+  --input-dir data/raw \
+  --images-dir data/images \
+  --annotations data/annotations/annotations.csv
 
-# Training
-python src/cli.py train-yolo --config configs/yolo_config.yaml
+# Dataset: split train/val/test
+python src/cli.py prepare-data --mode split \
+  --images-dir data/images \
+  --annotations data/annotations/annotations.csv \
+  --output-dir data \
+  --format both
 
-# Inference
-python src/cli.py run-classical --image data/images/sample.jpg --output outputs/images/classical.png
-python src/cli.py infer --method yolo --image data/images/sample.jpg --weights yolov8n.pt --output outputs/images/yolo.png
+# YOLO training
+python src/cli.py train-yolo \
+  --data data/yolo_dataset/dataset.yaml \
+  --model yolov8n.pt \
+  --epochs 50 \
+  --imgsz 640 \
+  --batch 8 \
+  --validate
 
-# Evaluation
-python src/cli.py evaluate --method classical --image-dir data/test/images --label-dir data/test/labels
-python src/cli.py evaluate --method yolo --image-dir data/test/images --label-dir data/test/labels --weights yolov8n.pt
+# Inference (classical)
+python src/cli.py infer \
+  --method classical \
+  --input data/test/images \
+  --output-dir outputs/images/classical \
+  --csv-out outputs/metrics/classical_predictions.csv \
+  --angle-method pca
 
-# Benchmark & reports
-python src/cli.py benchmark --config configs/config.yaml
-python src/cli.py generate-report
+# Inference (YOLO)
+python src/cli.py infer \
+  --method yolo \
+  --weights runs/brushpose_yolo/train/weights/best.pt \
+  --input data/test/images \
+  --output-dir outputs/images/yolo \
+  --csv-out outputs/metrics/yolo_predictions.csv
+
+# Evaluate predictions
+python src/cli.py evaluate \
+  --ground-truth data/test/labels/annotations.csv \
+  --predictions outputs/metrics/classical_predictions.csv \
+  --output-dir outputs/reports/classical_eval \
+  --method-name classical_pca \
+  --report-format both
+
+# Benchmark
+python src/cli.py benchmark \
+  --images-dir data/test/images \
+  --ground-truth data/test/labels/annotations.csv \
+  --output-dir outputs \
+  --language both \
+  --skip-yolo-if-missing
+
+# Final report
+python src/cli.py generate-report \
+  --benchmark-results outputs/metrics/benchmark_results.csv \
+  --metrics-dir outputs/metrics/benchmark \
+  --output outputs/reports/final_report_en.md \
+  --language en
 ```
-
