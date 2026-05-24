@@ -1,114 +1,106 @@
-# BrushPose AI
+﻿# BrushPose AI
 ### Toothbrush Detection and 2D Pose Estimation for Tabletop Computer Vision
 
-Industrial-style computer vision pipeline for **object localization** and **orientation estimation** from top-view RGB imagery.
+Industrial-grade computer vision pipeline for object localization and orientation estimation in controlled tabletop scenes.
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](#installation)
-[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green.svg)](#features)
-[![YOLOv8](https://img.shields.io/badge/YOLOv8-Ultralytics-orange.svg)](#training)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#license)
-[![Status](https://img.shields.io/badge/status-active%20development-brightgreen.svg)](#future-improvements)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?label=placeholder)](#installation)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green?label=placeholder)](#features)
+[![YOLO](https://img.shields.io/badge/YOLO-v8-orange?label=placeholder)](#training)
+[![License](https://img.shields.io/badge/License-MIT-yellow?label=placeholder)](#license)
+[![Status](https://img.shields.io/badge/Status-Portfolio%20Ready-brightgreen?label=placeholder)](#roadmap)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey?label=placeholder)](#installation)
+[![Last Commit](https://img.shields.io/badge/Last%20Commit-Replace%20Me-blueviolet?label=placeholder)](#)
 
 > Precision-first CV engineering for spatial reasoning on tabletop scenes.
 
 ---
 
-## Project Overview
-**BrushPose AI** is a modular computer vision system that detects a toothbrush on a homogeneous tabletop and estimates:
-- object center coordinates: \((x_{center}, y_{center})\)
-- orientation angle: \(\theta \in [0^\circ, 180^\circ)\)
+## Quick Links
+- [Unified CLI](src/cli.py)
+- [Classical CV Runner](scripts/run_classical_cv.py)
+- [Benchmark Runner](scripts/run_benchmark.py)
+- [Dataset Preparation Docs](docs/en/dataset_preparation.md)
+- [YOLO Docs](docs/en/yolo_training.md)
+- [Evaluation Docs](docs/en/evaluation.md)
+- [Russian README](README_RU.md)
 
-The project combines **classical computer vision** and **deep learning detection** to provide:
-- interpretable geometry-driven estimation
-- configurable YOLO-based detection
-- unified evaluation, benchmarking, and report generation
-
-This repository is designed as a portfolio-grade ML/CV engineering project with reproducible workflows, structured code, and practical deployment-oriented outputs.
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Problem Statement](#problem-statement)
+- [Features](#features)
+- [Project Architecture](#project-architecture)
+- [Demo](#demo)
+- [Dataset Structure](#dataset-structure)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Training](#training)
+- [Inference](#inference)
+- [Evaluation](#evaluation)
+- [Metrics](#metrics)
+- [Visualization and Results](#visualization-and-results)
+- [Roadmap](#roadmap)
+- [Command Examples](#command-examples)
+- [License](#license)
 
 ---
+
+## Project Overview
+BrushPose AI detects a toothbrush in top-view RGB images, estimates object center coordinates \((x_{center}, y_{center})\), and predicts axial orientation angle \(\theta \in [0^\circ, 180^\circ)\).
+
+The repository combines:
+- classical CV (HSV segmentation + contour geometry)
+- YOLOv8 detection
+- reproducible evaluation and benchmarking
+- portfolio-ready visual artifacts and reports
 
 ## Problem Statement
-**Input**:
-- Top-view RGB images or video frames containing a tabletop scene.
+**Input**: RGB images (single frame or batch) from tabletop scenes.  
+**Output**: bounding box, center point, orientation angle, visualization overlays, and metrics.
 
-**Output**:
-- Bounding box of the toothbrush
-- Center point coordinates in image space
-- Rotation angle relative to the image \(x\)-axis
-- Visualization overlays and evaluation artifacts
-
-**Core technical challenges**:
-- lighting variability (shadows, highlights, specular reflection)
-- low color contrast between object and background
-- segmentation instability for thin elongated objects
-- geometric ambiguity around near-symmetric pose states
-- annotation noise in angle labels
-
-BrushPose AI addresses these with dual pipelines and comparative benchmarking.
-
----
-
-## Practical Use Cases
-- **Robotics**: pre-grasp localization and orientation prior for manipulators
-- **Industrial automation**: pick-and-place alignment on conveyor or static surfaces
-- **Smart manufacturing**: object pose checks in assembly preparation
-- **Warehouse micro-automation**: tabletop sorting and orientation-aware handling
-- **Visual quality inspection**: pose consistency monitoring in packaged kits
-- **Lab automation**: controlled placement validation in repetitive workflows
-
----
+Key technical challenges:
+- illumination variability and specular highlights
+- low object/background contrast
+- contour instability for elongated thin shapes
+- axial ambiguity in orientation definition
 
 ## Features
-- **Toothbrush detection** from RGB tabletop scenes
-- **Center localization** with pixel-level coordinates
-- **Orientation estimation** via `minAreaRect` and PCA principal axis
-- **Classical CV pipeline**: HSV segmentation, morphology, contours
-- **YOLOv8 pipeline**: train/infer with configurable weights and thresholds
-- **Visualization toolkit**: bbox, center marker, orientation arrow, angle text
-- **Batch and single-image inference**
-- **Evaluation subsystem** with standard detection and pose metrics
-- **Benchmark framework** for method-to-method comparison
-- **Dataset utilities**: validation, split, annotation conversion
-- **CLI-first workflow** via `python src/cli.py ...`
-- **Bilingual technical documentation** (EN/RU)
-
----
+- Toothbrush detection in controlled scenes
+- Center localization and orientation estimation
+- Classical CV pipeline (`minAreaRect` + PCA orientation)
+- YOLOv8 pipeline (training + inference)
+- Unified CLI (`python src/cli.py ...`)
+- Dataset preparation and validation tools
+- Evaluation subsystem with report generation
+- Multi-method benchmarking
+- Visualization utilities for overlays and metric plots
+- Bilingual documentation (English + Russian)
 
 ## Project Architecture
-BrushPose AI uses modular separation across data, detection, pose, evaluation, and visualization layers.
-
-```text
-Data Collection/Validation
-          |
-          v
-    Detection Layer
- (Classical CV / YOLOv8)
-          |
-          v
-   Pose Estimation Layer
- (Center + Orientation)
-          |
-          v
-  Evaluation & Benchmark
-          |
-          v
- Visualization & Reports
+```mermaid
+flowchart TD
+    A[Dataset] --> B[Preprocessing]
+    B --> C[Detection]
+    C --> D[Pose Estimation]
+    D --> E[Evaluation]
+    E --> F[Benchmarking]
+    F --> G[Visualization]
 ```
 
-**Module responsibilities**
+Module map:
+- `src/data`: collection templates, validation, split, annotation conversion
+- `src/pose`: classical CV and geometry logic
+- `src/detection`: YOLO export/train/inference
+- `src/evaluation`: metrics, evaluator, report generator
+- `src/visualization`: rendering and plotting utilities
+- `scripts/`: benchmark and runner wrappers
 
-| Module | Responsibility |
-|---|---|
-| `src/data` | frame extraction, split generation, dataset validation, annotation conversion |
-| `src/detection` | YOLO training and inference adapters |
-| `src/pose` | geometry helpers, classical CV estimation, PCA orientation |
-| `src/evaluation` | metrics, benchmark runner, method comparison, reporting |
-| `src/visualization` | overlays, plots, comparative visual artifacts |
-| `src/cli.py` | unified command-line orchestration |
+Architecture placeholder: `assets/pipeline.png`
 
-Architecture image placeholder: `assets/pipeline.png`
-
----
+## Demo
+- Demo GIF: `assets/demo.gif`
+- Prediction example: `assets/prediction_example.png`
+- Orientation overlay: `assets/pca_orientation_example.png`
+- Benchmark chart: `assets/benchmark_plot.png`
 
 ## Dataset Structure
 ```text
@@ -127,260 +119,44 @@ data/
     └── labels/
 ```
 
-**Conventions**
-- Image naming: `scene_<id>.jpg` or `frame_<id>.jpg`
-- Labels (YOLO): one file per image, same stem name
-- Optional angle label appended after bbox tokens
-
-**Coordinate system**
-- Origin at top-left
-- \(x\) grows right, \(y\) grows downward
-
----
-
-## Data Collection
-Recommended acquisition protocol:
-- top-mounted camera with fixed optical axis normal to table
-- homogeneous matte background to reduce false contours
-- controlled illumination with diffusion where possible
-- multi-condition capture:
-  - different table colors/materials
-  - varied exposure and white balance
-  - multiple toothbrush orientations and positions
-
-To improve robustness:
-- include borderline hard samples (shadows, blur, reflections)
-- avoid label leakage from highly repetitive scene templates
-- balance orientation distribution to reduce angular bias
-
----
-
-## Annotation Format
-### YOLO label format
-```text
-<class_id> <x_center_norm> <y_center_norm> <width_norm> <height_norm> [angle_deg]
-```
-
-Example:
-```text
-0 0.532812 0.471354 0.285937 0.092708 37.5
-```
-
-### CSV format (for conversion pipelines)
-```csv
-image,x1,y1,x2,y2,class_id,angle_deg
-frame_000123.jpg,412,265,701,332,0,37.5
-```
-
-### Angle convention
-- Angle domain: \([0^\circ, 180^\circ)\)
-- Orientation axis only (no directional head-tail disambiguation)
-
----
-
 ## Installation
-### 1. Clone
 ```bash
 git clone https://github.com/<your-org>/BrushPoseAI.git
 cd BrushPoseAI
-```
-
-### 2. Create environment
-Windows (PowerShell):
-```powershell
 python -m venv .venv
-.venv\Scripts\Activate.ps1
-```
-
-Linux/macOS:
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-### 3. Install dependencies
-```bash
+# Windows: .venv\Scripts\Activate.ps1
+# Linux/macOS: source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
----
-
 ## Quick Start
 ```bash
-python src/cli.py validate-data --config configs/config.yaml
-python src/cli.py run-classical --image data/images/sample.jpg --output outputs/images/classical_sample.png
-python src/cli.py infer --method yolo --image data/images/sample.jpg --weights yolov8n.pt --output outputs/images/yolo_sample.png
-python src/cli.py benchmark --config configs/config.yaml
-```
-
-Demo placeholders:
-- `assets/demo.gif`
-- `assets/results_example.png`
-
----
-
-## Training
-### Dataset preparation flow
-1. Collect/extract images
-2. Annotate bbox and optional angle
-3. Convert annotations to YOLO labels
-4. Split into train/val/test
-5. Validate integrity and class balance
-
-### YOLO training command
-```bash
-python src/cli.py train-yolo --config configs/yolo_config.yaml
-```
-
-### Typical training parameters
-
-| Parameter | Meaning |
-|---|---|
-| `epochs` | number of optimization passes over training set |
-| `imgsz` | input image resolution |
-| `batch` | mini-batch size |
-| `conf` | confidence threshold used in inference |
-| `device` | CPU/GPU execution target |
-
-Model artifacts and logs are saved to configured output directories.
-
----
-
-## Inference
-### Single image
-```bash
-python src/cli.py infer --method classical --image data/images/sample.jpg --output outputs/images/pred_classical.png
-python src/cli.py infer --method yolo --image data/images/sample.jpg --weights yolov8n.pt --output outputs/images/pred_yolo.png
-```
-
-### Batch-oriented workflow
-```bash
-python src/cli.py evaluate --method classical --image-dir data/test/images --label-dir data/test/labels
-python src/cli.py evaluate --method yolo --image-dir data/test/images --label-dir data/test/labels --weights yolov8n.pt
-```
-
-Generated outputs include overlay images, metric tables, and summary reports.
-
----
-
-## Evaluation
-Evaluation is performed on a held-out set with ground-truth labels.
-
-Workflow:
-1. run detector and pose estimator
-2. match prediction vs ground truth
-3. compute detection and pose quality metrics
-4. aggregate statistics per method
-5. export CSV/JSON/Markdown artifacts
-
-Method comparison is performed through:
-```bash
-python src/cli.py benchmark --config configs/config.yaml
-```
-
----
-
-## Metrics
-### Intersection-over-Union (IoU)
-\[
-\mathrm{IoU} = \frac{|B_{pred}\cap B_{gt}|}{|B_{pred}\cup B_{gt}|}
-\]
-
-### Center error
-\[
-e_c = \sqrt{(x_{pred}-x_{gt})^2 + (y_{pred}-y_{gt})^2}
-\]
-
-### Angle error (axial, 180° periodicity)
-\[
-e_\theta = \min\left(|\theta_{pred}-\theta_{gt}|,\ 180^\circ-|\theta_{pred}-\theta_{gt}|\right)
-\]
-
-### Additional metrics
-- Precision / Recall
-- mAP@0.5 (pipeline placeholder support)
-- Median angle error
-- Percentage of samples with \(e_\theta < 5^\circ\)
-- Inference latency (ms/frame)
-- Throughput (FPS)
-
-Why these metrics matter:
-- IoU validates localization quality
-- center/angle errors validate geometric usability for manipulation
-- latency/FPS determine real-time feasibility
-
----
-
-## Example Outputs
-Expected artifacts:
-- predicted overlays with bbox + center + arrow + angle text
-- histogram of angle errors
-- benchmark comparison chart across methods
-- machine-readable summaries
-
-Placeholders:
-- `assets/results_example.png`
-- `assets/benchmark_plot.png`
-- `assets/architecture.png`
-
----
-
-## Limitations
-- Sensitivity to strong illumination drift for color-segmentation pipeline
-- Reduced reliability on cluttered/non-homogeneous backgrounds
-- Angle ambiguity for near-symmetric visual states
-- Partial occlusion can degrade contour and orientation estimates
-- Cross-domain generalization depends on dataset diversity
-
----
-
-## Future Improvements
-- Instance segmentation-assisted orientation refinement
-- Transformer-based detectors for better context modeling
-- Keypoint-based pose estimation for directional disambiguation
-- RGB-D integration for depth-aware pose
-- Real-time optimization pipeline (TensorRT/ONNX/OpenVINO)
-- ROS2 integration for robotic execution loops
-- Edge deployment profiles for Jetson-class devices
-
----
-
-## License
-This project is released under the **MIT License**.  
-See [LICENSE](LICENSE) for details.
-
-Attribution:
-- Keep original license and copyright notice in derivative work
-- Respect third-party dependency licenses
-
----
-
-## Acknowledgements
-- [OpenCV](https://opencv.org/)
-- [Ultralytics YOLO](https://github.com/ultralytics/ultralytics)
-- [NumPy](https://numpy.org/)
-- [matplotlib](https://matplotlib.org/)
-- Open-source computer vision community
-
----
-
-## Command Examples
-```bash
-# Dataset: collect template
-python src/cli.py prepare-data --mode collect \
-  --input-dir data/raw \
+python src/cli.py prepare-data --mode validate \
   --images-dir data/images \
   --annotations data/annotations/annotations.csv
 
-# Dataset: split train/val/test
-python src/cli.py prepare-data --mode split \
+python src/cli.py run-classical \
+  --input data/test/images \
+  --output outputs/images/classical_cv \
+  --csv-out outputs/metrics/classical_cv_predictions.csv \
+  --angle-method pca
+
+python src/cli.py infer \
+  --method yolo \
+  --weights runs/brushpose_yolo/train/weights/best.pt \
+  --input data/test/images \
+  --output-dir outputs/images/yolo \
+  --csv-out outputs/metrics/yolo_predictions.csv
+```
+
+## Training
+```bash
+python src/cli.py prepare-data --mode export-yolo \
   --images-dir data/images \
   --annotations data/annotations/annotations.csv \
-  --output-dir data \
-  --format both
+  --output-dir data/yolo_dataset
 
-# YOLO training
 python src/cli.py train-yolo \
   --data data/yolo_dataset/dataset.yaml \
   --model yolov8n.pt \
@@ -388,8 +164,10 @@ python src/cli.py train-yolo \
   --imgsz 640 \
   --batch 8 \
   --validate
+```
 
-# Inference (classical)
+## Inference
+```bash
 python src/cli.py infer \
   --method classical \
   --input data/test/images \
@@ -397,34 +175,131 @@ python src/cli.py infer \
   --csv-out outputs/metrics/classical_predictions.csv \
   --angle-method pca
 
-# Inference (YOLO)
 python src/cli.py infer \
   --method yolo \
   --weights runs/brushpose_yolo/train/weights/best.pt \
   --input data/test/images \
   --output-dir outputs/images/yolo \
   --csv-out outputs/metrics/yolo_predictions.csv
+```
 
-# Evaluate predictions
+## Evaluation
+```bash
 python src/cli.py evaluate \
   --ground-truth data/test/labels/annotations.csv \
   --predictions outputs/metrics/classical_predictions.csv \
   --output-dir outputs/reports/classical_eval \
   --method-name classical_pca \
   --report-format both
+```
 
-# Benchmark
+## Metrics
+\[
+\mathrm{IoU} = \frac{|B_{pred}\cap B_{gt}|}{|B_{pred}\cup B_{gt}|}
+\]
+
+\[
+e_c = \sqrt{(x_{pred}-x_{gt})^2 + (y_{pred}-y_{gt})^2}
+\]
+
+\[
+e_\theta = \min\left(|\theta_{pred}-\theta_{gt}|,\ 180^\circ-|\theta_{pred}-\theta_{gt}|\right)
+\]
+
+Primary KPIs:
+- detection accuracy
+- IoU and `map_50_proxy`
+- center error (px)
+- angle error (deg)
+- processing time and FPS
+
+## Visualization and Results
+Expected output artifacts:
+- overlays with bbox, center, orientation, confidence
+- per-sample evaluation CSV and summary JSON
+- benchmark comparison report and plots
+
+Placeholders:
+- `assets/dataset_example.png`
+- `assets/classical_prediction.png`
+- `assets/yolo_detection.png`
+- `assets/benchmark_plot.png`
+- `assets/error_analysis.png`
+
+## Roadmap
+- [x] Classical CV pose estimation pipeline
+- [x] YOLO training and inference integration
+- [x] Evaluation subsystem with geometric metrics
+- [x] Multi-method benchmark orchestration
+- [ ] Rotated bounding boxes (OBB)
+- [ ] Segmentation-enhanced orientation estimation
+- [ ] ROS2 integration
+- [ ] TensorRT acceleration
+- [ ] Real-time streaming pipeline
+- [ ] Synthetic data augmentation workflow
+- [ ] Dockerized reproducible runtime
+
+## Limitations
+- Classical segmentation is sensitive to lighting/background drift
+- Orientation may degrade on partially occluded objects
+- Detection quality depends on data diversity and annotation quality
+
+## Command Examples
+```bash
+# collect template annotations from raw data
+python src/cli.py prepare-data --mode collect \
+  --input-dir data/raw \
+  --images-dir data/images \
+  --annotations data/annotations/annotations.csv
+
+# split dataset
+python src/cli.py prepare-data --mode split \
+  --images-dir data/images \
+  --annotations data/annotations/annotations.csv \
+  --output-dir data \
+  --format both
+
+# benchmark
 python src/cli.py benchmark \
   --images-dir data/test/images \
   --ground-truth data/test/labels/annotations.csv \
   --output-dir outputs \
+  --yolo-weights runs/brushpose_yolo/train/weights/best.pt \
+  --methods classical_min_area_rect classical_pca yolo_geometric \
   --language both \
   --skip-yolo-if-missing
 
-# Final report
+# generate final report
 python src/cli.py generate-report \
   --benchmark-results outputs/metrics/benchmark_results.csv \
   --metrics-dir outputs/metrics/benchmark \
   --output outputs/reports/final_report_en.md \
   --language en
 ```
+
+## FAQ
+<details>
+<summary>Why does YOLO angle metric show as unavailable in some reports?</summary>
+Standard YOLO detection predicts boxes/confidence/classes. Angle metrics are unavailable unless a geometric angle post-process is provided.
+</details>
+
+<details>
+<summary>Why can classical CV fail on certain images?</summary>
+HSV segmentation is sensitive to illumination, shadows, and low contrast. Tune `hsv_lower`, `hsv_upper`, and morphology parameters in `configs/config.yaml`.
+</details>
+
+## Reproducibility
+- Run all commands from repository root.
+- Use `configs/config.yaml` for stable defaults.
+- Keep train/val/test splits fixed with `--seed`.
+- Store metrics and reports under `outputs/`.
+
+## License
+Released under the MIT License. See [LICENSE](LICENSE).
+
+## Acknowledgements
+- [OpenCV](https://opencv.org/)
+- [Ultralytics](https://github.com/ultralytics/ultralytics)
+- [NumPy](https://numpy.org/)
+- [pandas](https://pandas.pydata.org/)
+- [matplotlib](https://matplotlib.org/)

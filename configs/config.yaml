@@ -1,26 +1,80 @@
+﻿# Global project settings
 project:
   name: BrushPose AI
+  version: "1.0.0"
   output_dir: outputs
+
+# Dataset-related paths and defaults
 data:
-  image_dir: data/images
-  annotation_dir: data/annotations
+  raw_dir: data/raw                    # Input directory for raw captured data
+  images_dir: data/images              # Canonical image storage for annotation/inference
+  annotations: data/annotations/annotations.csv
   train_dir: data/train
   val_dir: data/val
   test_dir: data/test
-inference:
-  conf_threshold: 0.25
-  iou_threshold: 0.5
-classical_cv:
-  hsv_lower: [0, 0, 30]
-  hsv_upper: [180, 80, 255]
-  morph_kernel: 5
-  min_area: 500
-  debug: false
-yolo:
-  model_name: yolov8n.pt
-  imgsz: 640
-  conf: 0.25
-  device: cpu
-benchmark:
-  methods: ["classical", "pca", "yolo"]
+  test_images: data/test/images
+  seed: 42                             # Random seed for reproducible splits
 
+# YOLO subsystem defaults
+yolo:
+  data: data/yolo_dataset/dataset.yaml # Path to YOLO dataset descriptor
+  model: yolov8n.pt                    # Base model checkpoint (or custom weights)
+  weights: runs/brushpose_yolo/train/weights/best.pt
+  epochs: 50
+  imgsz: 640                           # Input resolution in pixels
+  batch: 8
+  device: auto                         # auto | cpu | cuda:0
+  project: runs/brushpose_yolo
+  name: train
+  conf: 0.25                           # Confidence threshold for inference
+  iou: 0.50                            # NMS IoU threshold for inference
+
+# Classical CV pipeline defaults
+classical:
+  angle_method: pca                    # pca | min_area_rect
+  hsv_lower: [0, 40, 40]               # HSV lower bound: [H, S, V]
+  hsv_upper: [180, 255, 255]           # HSV upper bound: [H, S, V]
+  blur_kernel: 5
+  morph_kernel: 5
+  min_contour_area: 500                # Minimum contour area in pixels
+  max_contour_area_ratio: 0.70         # Maximum contour/image area ratio
+  output_dir: outputs/images/classical_cv
+  csv_out: outputs/metrics/classical_cv_predictions.csv
+
+# Evaluation defaults
+evaluation:
+  ground_truth: data/test/labels/annotations.csv
+  predictions: outputs/metrics/classical_cv_predictions.csv
+  output_dir: outputs/reports/classical_cv_eval
+  method_name: classical_cv_pca
+  iou_threshold: 0.50                  # Positive detection threshold
+  angle_threshold: 5.0                 # Degrees, for angle accuracy @ threshold
+  center_threshold: 10.0               # Pixels, optional center pass threshold
+  report_format: both                  # markdown | json | both
+
+# Benchmark orchestration defaults
+benchmark:
+  images_dir: data/test/images
+  ground_truth: data/test/labels/annotations.csv
+  output_dir: outputs
+  methods: [classical_min_area_rect, classical_pca, yolo_geometric]
+  yolo_weights: runs/brushpose_yolo/train/weights/best.pt
+  language: both                       # en | ru | both
+
+# Visualization defaults
+visualization:
+  output_dir: outputs/images
+  plots_dir: outputs/plots
+  arrow_length: 80
+  thickness: 2
+  font_scale: 0.6
+  image_format: png                    # png | jpg
+  dpi: 150
+
+# Final report generation defaults
+report:
+  benchmark_results: outputs/metrics/benchmark_results.csv
+  metrics_dir: outputs/metrics/benchmark
+  output: outputs/reports/final_report_en.md
+  language: en                         # en | ru
+  title: BrushPose AI Final Report

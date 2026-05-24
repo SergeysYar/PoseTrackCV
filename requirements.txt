@@ -1,9 +1,15 @@
-opencv-python>=4.8
+# Core scientific stack
 numpy>=1.24
 pandas>=2.0
 matplotlib>=3.7
-PyYAML>=6.0
 tqdm>=4.66
-pytest>=8.0
+
+# Computer vision
+opencv-python>=4.8
 ultralytics>=8.2
 
+# Configuration
+PyYAML>=6.0
+
+# Development and testing
+pytest>=8.0

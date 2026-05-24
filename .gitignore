@@ -1,22 +1,55 @@
+﻿# Python cache and build artifacts
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+build/
+dist/
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
+
+# Virtual environments
 .venv/
 venv/
 env/
+
+# IDE and editor
 .idea/
 .vscode/
-Thumbs.db
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# Data and archives
+data/raw/
+datasets/
+*.zip
+*.tar
+*.tar.gz
+
+# Model artifacts and checkpoints
 *.pt
+*.pth
 *.onnx
 *.engine
-*.log
-outputs/images/*
-outputs/videos/*
-outputs/reports/*
-outputs/metrics/*
-outputs/plots/*
-!outputs/**/.gitkeep
+runs/
 
+# Outputs and logs
+outputs/
+logs/
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Keep empty tracked folders where needed
+!data/**/.gitkeep
+!outputs/**/.gitkeep

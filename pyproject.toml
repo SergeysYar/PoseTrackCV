@@ -5,10 +5,21 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "brushpose-ai"
 version = "1.0.0"
-description = "BrushPose AI: toothbrush localization and orientation estimation"
+description = "BrushPose AI: toothbrush detection, center localization, and orientation estimation for tabletop CV"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
+authors = [{ name = "[Your Name or Team]", email = "maintainer@example.com" }]
+keywords = ["computer-vision", "pose-estimation", "opencv", "yolo", "ml-engineering"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Scientific/Engineering :: Image Recognition",
+]
 dependencies = [
   "opencv-python>=4.8",
   "numpy>=1.24",
@@ -22,3 +33,7 @@ dependencies = [
 pythonpath = ["src"]
 testpaths = ["tests"]
 
+[project.urls]
+Homepage = "https://github.com/<your-org>/BrushPoseAI"
+Documentation = "https://github.com/<your-org>/BrushPoseAI/tree/main/docs"
+Repository = "https://github.com/<your-org>/BrushPoseAI"
