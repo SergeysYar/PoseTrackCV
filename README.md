@@ -19,10 +19,17 @@ Industrial-grade computer vision pipeline for object localization and orientatio
 - [Unified CLI](src/cli.py)
 - [Classical CV Runner](scripts/run_classical_cv.py)
 - [Benchmark Runner](scripts/run_benchmark.py)
-- [Dataset Preparation Docs](docs/en/dataset_preparation.md)
-- [YOLO Docs](docs/en/yolo_training.md)
-- [Evaluation Docs](docs/en/evaluation.md)
-- [Russian README](README_RU.md)
+- [Русская версия README](README_RU.md)
+- [English Documentation](#english-documentation)
+
+## English Documentation
+- [Architecture](docs/en/architecture.md)
+- [Dataset Preparation](docs/en/dataset_preparation.md)
+- [YOLO Training](docs/en/yolo_training.md)
+- [Evaluation](docs/en/evaluation.md)
+- [Benchmarking](docs/en/benchmarking.md)
+- [Mathematical Model](docs/en/math_model.md)
+- [Final Report Template](docs/en/final_report.md)
 
 ## Table of Contents
 - [Project Overview](#project-overview)

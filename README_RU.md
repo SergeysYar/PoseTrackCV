@@ -19,10 +19,17 @@
 - [Единый CLI](src/cli.py)
 - [Скрипт classical CV](scripts/run_classical_cv.py)
 - [Скрипт бенчмарка](scripts/run_benchmark.py)
-- [Документация по датасету](docs/ru/dataset_preparation.md)
-- [Документация YOLO](docs/ru/yolo_training.md)
-- [Документация по оценке](docs/ru/evaluation.md)
 - [English README](README.md)
+- [Русская документация](#русская-документация)
+
+## Русская документация
+- [Архитектура](docs/ru/architecture.md)
+- [Подготовка датасета](docs/ru/dataset_preparation.md)
+- [Обучение YOLO](docs/ru/yolo_training.md)
+- [Оценка качества](docs/ru/evaluation.md)
+- [Бенчмаркинг](docs/ru/benchmarking.md)
+- [Математическая модель](docs/ru/math_model.md)
+- [Шаблон финального отчета](docs/ru/final_report.md)
 
 ## Содержание
 - [Обзор проекта](#обзор-проекта)
