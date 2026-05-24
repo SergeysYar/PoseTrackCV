@@ -130,26 +130,23 @@ data/
 ```bash
 git clone https://github.com/<your-org>/BrushPoseAI.git
 cd BrushPoseAI
-python -m venv .venv
-# Windows: .venv\Scripts\Activate.ps1
-# Linux/macOS: source .venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
+# при необходимости установите uv: https://docs.astral.sh/uv/getting-started/installation/
+uv sync
 ```
 
 ## Быстрый старт
 ```bash
-python src/cli.py prepare-data --mode validate \
+uv run src/cli.py prepare-data --mode validate \
   --images-dir data/images \
   --annotations data/annotations/annotations.csv
 
-python src/cli.py run-classical \
+uv run src/cli.py run-classical \
   --input data/test/images \
   --output outputs/images/classical_cv \
   --csv-out outputs/metrics/classical_cv_predictions.csv \
   --angle-method pca
 
-python src/cli.py infer \
+uv run src/cli.py infer \
   --method yolo \
   --weights runs/brushpose_yolo/train/weights/best.pt \
   --input data/test/images \
@@ -159,12 +156,12 @@ python src/cli.py infer \
 
 ## Обучение
 ```bash
-python src/cli.py prepare-data --mode export-yolo \
+uv run src/cli.py prepare-data --mode export-yolo \
   --images-dir data/images \
   --annotations data/annotations/annotations.csv \
   --output-dir data/yolo_dataset
 
-python src/cli.py train-yolo \
+uv run src/cli.py train-yolo \
   --data data/yolo_dataset/dataset.yaml \
   --model yolov8n.pt \
   --epochs 50 \
@@ -175,14 +172,14 @@ python src/cli.py train-yolo \
 
 ## Инференс
 ```bash
-python src/cli.py infer \
+uv run src/cli.py infer \
   --method classical \
   --input data/test/images \
   --output-dir outputs/images/classical \
   --csv-out outputs/metrics/classical_predictions.csv \
   --angle-method pca
 
-python src/cli.py infer \
+uv run src/cli.py infer \
   --method yolo \
   --weights runs/brushpose_yolo/train/weights/best.pt \
   --input data/test/images \
@@ -192,7 +189,7 @@ python src/cli.py infer \
 
 ## Оценка качества
 ```bash
-python src/cli.py evaluate \
+uv run src/cli.py evaluate \
   --ground-truth data/test/labels/annotations.csv \
   --predictions outputs/metrics/classical_predictions.csv \
   --output-dir outputs/reports/classical_eval \
@@ -254,20 +251,20 @@ e_\theta = \min\left(|\theta_{pred}-\theta_{gt}|,\ 180^\circ-|\theta_{pred}-\the
 ## Примеры команд
 ```bash
 # подготовка шаблона аннотаций
-python src/cli.py prepare-data --mode collect \
+uv run src/cli.py prepare-data --mode collect \
   --input-dir data/raw \
   --images-dir data/images \
   --annotations data/annotations/annotations.csv
 
 # split train/val/test
-python src/cli.py prepare-data --mode split \
+uv run src/cli.py prepare-data --mode split \
   --images-dir data/images \
   --annotations data/annotations/annotations.csv \
   --output-dir data \
   --format both
 
 # benchmark
-python src/cli.py benchmark \
+uv run src/cli.py benchmark \
   --images-dir data/test/images \
   --ground-truth data/test/labels/annotations.csv \
   --output-dir outputs \
@@ -277,7 +274,7 @@ python src/cli.py benchmark \
   --skip-yolo-if-missing
 
 # final report
-python src/cli.py generate-report \
+uv run src/cli.py generate-report \
   --benchmark-results outputs/metrics/benchmark_results.csv \
   --metrics-dir outputs/metrics/benchmark \
   --output outputs/reports/final_report_ru.md \

@@ -32,20 +32,13 @@ Key directories:
 ## 3. Development Setup
 
 ```bash
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# Linux/macOS
-# source .venv/bin/activate
-
-pip install --upgrade pip
-pip install -r requirements.txt
+uv sync
 ```
 
 Optional editable install:
 
 ```bash
-pip install -e .
+uv sync --dev
 ```
 
 ## 4. Development Workflow
@@ -101,15 +94,15 @@ Recommended PR checklist:
 Run full test suite:
 
 ```bash
-pytest
+uv run pytest
 ```
 
 Run targeted tests:
 
 ```bash
-pytest tests/test_metrics.py
-pytest tests/test_geometry.py
-pytest tests/test_dataset.py
+uv run pytest tests/test_metrics.py
+uv run pytest tests/test_geometry.py
+uv run pytest tests/test_dataset.py
 ```
 
 For pipeline changes, include at least one dry-run command in PR description.
